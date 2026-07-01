@@ -7,4 +7,3 @@
 </picture>
 
 </div>
-<!-- profile readme -->
