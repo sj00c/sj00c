@@ -24,6 +24,17 @@ jobs:
             dist/snake.svg?color_snake=#ff4d4d&palette=github-light
             dist/snake-dark.svg?color_snake=#ff4d4d&palette=github-dark
 
+      - name: Remove stack bar from SVGs
+        run: |
+          for f in dist/*.svg; do
+            # stack 바(class="u") rect 전부 제거
+            perl -0777 -i -pe 's{<rect class="u [^>]*?/>}{}g' "$f"
+            # svg 높이/viewBox 하단 여백 크롭 (192 -> 180)
+            perl -0777 -i -pe 's{(<svg[^>]*?height=")192(")}{${1}180${2}}' "$f"
+            perl -0777 -i -pe 's{(viewBox="-?\d+ -?\d+ \d+ )192(")}{${1}180${2}}' "$f"
+            echo "processed $f"
+          done
+
       - name: Push to output branch
         uses: crazy-max/ghaction-github-pages@v4
         with:
